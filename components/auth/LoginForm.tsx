@@ -227,7 +227,7 @@ export function LoginForm() {
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
               <p className="text-sm text-blue-700">
                 <strong>Note:</strong> In demo mode, new accounts are stored locally. 
-                Choose "Admin Account\" to access the admin panel features.
+                Choose "Admin Account/" to access the admin panel features.
               </p>
             </div>
           </TabsContent>
