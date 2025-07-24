@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NEXT_FONT_GOOGLE_OPTIMIZED=false next build",
+    "build": "next build",
+    "export": "next export",
     "start": "next start",
     "lint": "next lint"
   },
