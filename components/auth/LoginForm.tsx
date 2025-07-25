@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,11 @@ import toast from "react-hot-toast";
 
 export function LoginForm() {
   const router = useRouter();
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [signupData, setSignupData] = useState({
     email: "",
     password: "",
@@ -40,11 +44,18 @@ export function LoginForm() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const user = await login(loginData.email, loginData.password);
       toast.success("Logged in successfully!");
-      router.push(user?.role === "admin" ? "/admin" : "/");
-    } catch {
+
+      // Redirect based on user role
+      if (user?.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
       toast.error("Invalid credentials");
     } finally {
       setLoading(false);
@@ -65,15 +76,22 @@ export function LoginForm() {
     }
 
     setLoading(true);
+
     try {
       const user = await register(
         signupData.email,
         signupData.password,
-        signupData.role
+        signupData.role,
       );
       toast.success("Account created successfully!");
-      router.push(user?.role === "admin" ? "/admin" : "/");
-    } catch {
+
+      // Redirect based on user role
+      if (user?.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/");
+      }
+    } catch (error) {
       toast.error("Failed to create account. Email might already exist.");
     } finally {
       setLoading(false);
@@ -100,7 +118,7 @@ export function LoginForm() {
               <div>
                 <Label htmlFor="login-email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="login-email"
                     type="email"
@@ -118,7 +136,7 @@ export function LoginForm() {
               <div>
                 <Label htmlFor="login-password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="login-password"
                     type="password"
@@ -158,7 +176,7 @@ export function LoginForm() {
               <div>
                 <Label htmlFor="signup-email">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="signup-email"
                     type="email"
@@ -176,17 +194,18 @@ export function LoginForm() {
               <div>
                 <Label htmlFor="signup-password">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="signup-password"
                     type="password"
-                    placeholder="Create a password"
+                    placeholder="Create a password (min 6 characters)"
                     value={signupData.password}
                     onChange={(e) =>
                       setSignupData({ ...signupData, password: e.target.value })
                     }
                     className="pl-10"
                     required
+                    minLength={6}
                   />
                 </div>
               </div>
@@ -194,7 +213,7 @@ export function LoginForm() {
               <div>
                 <Label htmlFor="confirm-password">Confirm Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     id="confirm-password"
                     type="password"
@@ -249,13 +268,13 @@ export function LoginForm() {
               </Button>
             </form>
 
- <div className="mt-4 p-3 bg-blue-50 rounded-lg">
- <p>
-  <strong>Note:</strong> In demo mode, new accounts are stored locally.
-  Choose &ldquo;Admin Account&rdquo; to access the admin panel features.
-</p>
-
-</div>
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-700">
+                <strong>Note:</strong> In demo mode, new accounts are stored
+                locally. Choose <strong>"Admin Account"</strong> to access the admin panel
+                features.
+              </p>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
