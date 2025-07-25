@@ -1,31 +1,43 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers/AuthProvider';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Lock, Mail, User, UserPlus } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Lock, Mail, User, UserPlus } from "lucide-react";
+import toast from "react-hot-toast";
 
 export function LoginForm() {
   const router = useRouter();
   const [loginData, setLoginData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
-  
+
   const [signupData, setSignupData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'user' as 'admin' | 'user',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user" as "admin" | "user",
   });
-  
+
   const [loading, setLoading] = useState(false);
   const { login, register } = useAuth();
 
@@ -35,16 +47,16 @@ export function LoginForm() {
 
     try {
       const user = await login(loginData.email, loginData.password);
-      toast.success('Logged in successfully!');
-      
+      toast.success("Logged in successfully!");
+
       // Redirect based on user role
-      if (user?.role === 'admin') {
-        router.push('/admin');
+      if (user?.role === "admin") {
+        router.push("/admin");
       } else {
-        router.push('/');
+        router.push("/");
       }
     } catch (error) {
-      toast.error('Invalid credentials');
+      toast.error("Invalid credentials");
     } finally {
       setLoading(false);
     }
@@ -52,31 +64,35 @@ export function LoginForm() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (signupData.password !== signupData.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error("Passwords do not match");
       return;
     }
 
     if (signupData.password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     setLoading(true);
 
     try {
-      const user = await register(signupData.email, signupData.password, signupData.role);
-      toast.success('Account created successfully!');
-      
+      const user = await register(
+        signupData.email,
+        signupData.password,
+        signupData.role,
+      );
+      toast.success("Account created successfully!");
+
       // Redirect based on user role
-      if (user?.role === 'admin') {
-        router.push('/admin');
+      if (user?.role === "admin") {
+        router.push("/admin");
       } else {
-        router.push('/');
+        router.push("/");
       }
     } catch (error) {
-      toast.error('Failed to create account. Email might already exist.');
+      toast.error("Failed to create account. Email might already exist.");
     } finally {
       setLoading(false);
     }
@@ -96,7 +112,7 @@ export function LoginForm() {
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
@@ -108,7 +124,9 @@ export function LoginForm() {
                     type="email"
                     placeholder="Enter your email"
                     value={loginData.email}
-                    onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, email: e.target.value })
+                    }
                     className="pl-10"
                     required
                   />
@@ -124,27 +142,35 @@ export function LoginForm() {
                     type="password"
                     placeholder="Enter your password"
                     value={loginData.password}
-                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, password: e.target.value })
+                    }
                     className="pl-10"
                     required
                   />
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
+              <Button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700"
+                disabled={loading}
+              >
+                {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
 
             <div className="mt-4 p-3 bg-green-50 rounded-lg">
               <p className="text-sm text-green-700">
-                <strong>Demo Credentials:</strong><br />
-                <strong>Admin:</strong> admin@nithin-cart.com / admin123<br />
+                <strong>Demo Credentials:</strong>
+                <br />
+                <strong>Admin:</strong> admin@nithin-cart.com / admin123
+                <br />
                 <strong>User:</strong> user@nithin-cart.com / admin123
               </p>
             </div>
           </TabsContent>
-          
+
           <TabsContent value="signup">
             <form onSubmit={handleSignup} className="space-y-4">
               <div>
@@ -156,7 +182,9 @@ export function LoginForm() {
                     type="email"
                     placeholder="Enter your email"
                     value={signupData.email}
-                    onChange={(e) => setSignupData({ ...signupData, email: e.target.value })}
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, email: e.target.value })
+                    }
                     className="pl-10"
                     required
                   />
@@ -172,7 +200,9 @@ export function LoginForm() {
                     type="password"
                     placeholder="Create a password (min 6 characters)"
                     value={signupData.password}
-                    onChange={(e) => setSignupData({ ...signupData, password: e.target.value })}
+                    onChange={(e) =>
+                      setSignupData({ ...signupData, password: e.target.value })
+                    }
                     className="pl-10"
                     required
                     minLength={6}
@@ -189,7 +219,12 @@ export function LoginForm() {
                     type="password"
                     placeholder="Confirm your password"
                     value={signupData.confirmPassword}
-                    onChange={(e) => setSignupData({ ...signupData, confirmPassword: e.target.value })}
+                    onChange={(e) =>
+                      setSignupData({
+                        ...signupData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
                     className="pl-10"
                     required
                   />
@@ -198,7 +233,12 @@ export function LoginForm() {
 
               <div>
                 <Label htmlFor="role">Account Type</Label>
-                <Select value={signupData.role} onValueChange={(value: 'admin' | 'user') => setSignupData({ ...signupData, role: value })}>
+                <Select
+                  value={signupData.role}
+                  onValueChange={(value: "admin" | "user") =>
+                    setSignupData({ ...signupData, role: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
@@ -219,15 +259,20 @@ export function LoginForm() {
                 </Select>
               </div>
 
-              <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={loading}>
-                {loading ? 'Creating Account...' : 'Create Account'}
+              <Button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700"
+                disabled={loading}
+              >
+                {loading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 
             <div className="mt-4 p-3 bg-blue-50 rounded-lg">
               <p className="text-sm text-blue-700">
-                <strong>Note:</strong> In demo mode, new accounts are stored locally. 
-                Choose "Admin Account/" to access the admin panel features.
+                <strong>Note:</strong> In demo mode, new accounts are stored
+                locally. Choose "Admin Account/" to access the admin panel
+                features.
               </p>
             </div>
           </TabsContent>
